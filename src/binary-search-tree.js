@@ -11,7 +11,7 @@ const {
  * Implement simple binary search tree according to task description
  * using Node from extensions  module.exports = 
  */
-module.exports = class BinarySearchTree {
+ module.exports = class BinarySearchTree {
   constructor() {
     this.data = null;
     this.left = null;
@@ -45,13 +45,18 @@ module.exports = class BinarySearchTree {
   }
 
   has(data) {
-    return this.hasRec(data, this);
+    return this.hasRec(this, data);
   }
 
-  hasRec(data, node) {
-    if (node.data == data) return true;
-    if (node.left || node.right) {
-
+  hasRec(node, data) {
+    if (node == null){
+      return false;
+    } else if (node.data == data)
+      return true;
+    if (data > node.data) {
+      return this.hasRec(node.right, data);
+    } else {
+      return this.hasRec(node.left, data);
     }
   }
 
@@ -61,15 +66,32 @@ module.exports = class BinarySearchTree {
 
   findRec(node, data) {
     if (node == null || node.data == data)
-      return root;
-    if (node.data < data)
-      return search(node.right, data);
-    return search(node.left, data);
+      return node;
+    if (data > node.data) {
+      return this.findRec(node.right, data);
+    } else {
+      return this.findRec(node.left, data);
+    }
   }
 
   remove(data) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    return this.removeRec(this, data);
+  }
+
+  removeRec(node, data) {
+    if (node.data == data) {
+      node.data = null;
+      node.left = null;
+      node.right = null;
+      return true;
+    } else if (node.data == null) {
+      return false;
+    }
+    if (data > node.data) {
+      return this.removeRec(node.right, data);
+    } else {
+      return this.removeRec(node.left, data);
+    }
   }
 
   min() {
@@ -88,7 +110,7 @@ module.exports = class BinarySearchTree {
 // tree.add(5);
 // tree.add(10);
 // tree.add(3);
-// tree.add(8);
-// tree.add(4);
 
-// console.log(JSON.stringify(tree));
+// tree.find(3);
+
+// console.log(JSON.stringify(tree.find(5)));
